@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
+    
     @StateObject var timeManager = TimeManager()
     
     var title: String {
@@ -33,62 +34,20 @@ struct ContentView: View {
     }
     
     var content : some View {
-        ZStack {
-            VStack(spacing: 10) {
-                // MARK: Title
-                Text(title)
-                    .font(.title)
-                    .foregroundColor(Color(#colorLiteral(red: 1, green: 0, blue: 0.7282488942, alpha: 1)))
-                    .padding(.top, 25.0)
-                    .opacity(0.5)
-                    .fontWeight(.bold)
-                
-                //MARK: Progress Timer
-                Text(timeManager.taskPeriod.rawValue)
-                    .font(.title2)
-                    .fontWeight(.bold)
-                    .foregroundColor(Color.black)
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 8)
-                    .background(.thinMaterial)
-                    .background(Color(#colorLiteral(red: 1, green: 0.9200647473, blue: 0.473361969, alpha: 1)))
-                    .cornerRadius(15)
-                
-                Spacer()
-            }
-            .padding()
-            
-            VStack(spacing: 40) {
-                // MARK: Progress Ring
-                ProgressRing()
-                    .environmentObject(timeManager)
-                
-                HStack(spacing: 60){
-                    //MARK: Start Time
-                    VStack(spacing: 5){
-                        Text(timeManager.timeToWork == .notStarted ? "Start" : "Started")
-                            .opacity(0.5)
-                        
-                        Text(timeManager.startTime, format: .dateTime.weekday().hour().minute().second())
-                            .fontWeight(.bold)
-                    }
+        NavigationStack {
+            ZStack {
+                VStack(spacing: 10) {
+                    // MARK: Title
+                    Text(title)
+                        .font(.title)
+                        .foregroundColor(Color(#colorLiteral(red: 1, green: 0, blue: 0.7282488942, alpha: 1)))
+                        .padding(.top, 25.0)
+                        .opacity(0.5)
+                        .fontWeight(.bold)
                     
-                    //MARK: End Time
-                    VStack(spacing: 5){
-                        Text(timeManager.timeToWork == .notStarted ? "End" : "Ends")
-                            .opacity(0.5)
-                        
-                        Text(timeManager.endTime, format: .dateTime.weekday().hour().minute().second())
-                            .fontWeight(.bold)
-                    }
-                }
-                
-                //MARK: Button
-                Button {
-                    timeManager.toggleTimer()
-                } label: {
-                    Text(timeManager.timeToWork == .startedWorking ? "End task" : "Start task")
-                        .font(.largeTitle)
+                    //MARK: Progress Timer
+                    Text(timeManager.taskPeriod.rawValue)
+                        .font(.title2)
                         .fontWeight(.bold)
                         .foregroundColor(Color.black)
                         .padding(.horizontal, 16)
@@ -96,11 +55,65 @@ struct ContentView: View {
                         .background(.thinMaterial)
                         .background(Color(#colorLiteral(red: 1, green: 0.9200647473, blue: 0.473361969, alpha: 1)))
                         .cornerRadius(15)
+                    
+                    Spacer()
                 }
+                .padding()
+                
+                VStack(spacing: 40) {
+                    // MARK: Progress Ring
+                    ProgressRing()
+                        .environmentObject(timeManager)
+                    
+                    HStack(spacing: 60){
+                        //MARK: Start Time
+                        VStack(spacing: 5){
+                            Text(timeManager.timeToWork == .notStarted ? "Start" : "Started")
+                                .opacity(0.5)
+                            
+                            Text(timeManager.startTime, format: .dateTime.weekday().hour().minute().second())
+                                .fontWeight(.bold)
+                        }
+                        
+                        //MARK: End Time
+                        VStack(spacing: 5){
+                            Text(timeManager.timeToWork == .notStarted ? "End" : "Ends")
+                                .opacity(0.5)
+                            
+                            Text(timeManager.endTime, format: .dateTime.weekday().hour().minute().second())
+                                .fontWeight(.bold)
+                        }
+                    }
+                    
+                    
+                    //MARK: Button
+                    Button {
+                        timeManager.toggleTimer()
+                    } label: {
+                        Text(timeManager.timeToWork == .startedWorking ? "End task" : "Start task")
+                            .font(.largeTitle)
+                            .fontWeight(.bold)
+                            .foregroundColor(Color.black)
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 8)
+                            .background(.thinMaterial)
+                            .background(Color(#colorLiteral(red: 1, green: 0.9200647473, blue: 0.473361969, alpha: 1)))
+                            .cornerRadius(15)
+                    }
+                    
+
+
+                    NavigationLink(destination: ToDoList()) {
+                        Text("View To-Do List")
+                    }
+                    .font(.title)
+                   
+                    
+                }
+                .padding()
             }
-            .padding()
+            .foregroundColor(.black)
         }
-        .foregroundColor(.black)
     }
 }
 
